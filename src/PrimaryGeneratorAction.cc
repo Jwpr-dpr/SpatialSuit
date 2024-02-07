@@ -1,32 +1,11 @@
+// Archivo PrimaryGeneratorAction.cc del Proyecto Spatial Suit
 //
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-//
-// $Id$
-//
-/// \file EDPrimaryGeneratorAction.cc
-/// \brief Implementation of the EDPrimaryGeneratorAction class
+//Este archivo nos permite crear las acciones que ocurriran en nuestras
+//simulaciones, en este caso, se creo una G4ParticleGun, que disparará
+//partículas cargadas en direcciones aleatorias del espacio que abarca
+//la simulación, y de igual manera se define el evento, herramienta para
+//aleatorizar las direcciones en que se lance la partícula
+
 
 #include "PrimaryGeneratorAction.hh"
 
@@ -41,17 +20,20 @@
 #include "Randomize.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+//Instancia de la ParticleGun
 PrimaryGeneratorAction::PrimaryGeneratorAction()
     : G4VUserPrimaryGeneratorAction(),
       fParticleGun(0),
       fRandom(true) 
-{
+{   //Establecemos las partículas que se van a lanzar en la simulación
     std::vector<G4String> particleNames = {"mu-","proton","gamma"};
     G4int nofParticles = 1;
 
     for (G4String ParticleName : particleNames) {
         fParticleGun = new G4ParticleGun(nofParticles);
         G4String particleName = ParticleName;
+        //Establecemos la posición desde la cuál se lanzaran las 
+        //partículas y el momento de las mismas
         G4ThreeVector position(-0.2*m,2.9*m,-1.*m);
         G4ThreeVector momentum(0,0,1.*GeV);
 
@@ -76,8 +58,9 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 {
-  //this function is called at the begining of ecah event  //
-
+  //this function is called at the begining of each event  //
+  //La partícula se define como un evento aleatorio, con los siguientes
+  //ángulos como parámetros de dirección del lanzamiento.
   if(fRandom){
     G4double dtheta = 10.*deg;
     G4double dphi = 50.*deg;

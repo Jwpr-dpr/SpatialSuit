@@ -1,32 +1,9 @@
+//Archivo EDDetectorConstruction.cc del proyecto Spatial Suit.
 //
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-//
-// $Id$
-//
-/// \file EDDetectorConstruction.cc
-/// \brief Implementation of the EDDetectorConstruction class
+//Este archivo contiene la construcción de cada una de las geometrías 
+//involucradas en el proyecto, es decir, todo lo que tiene un cuerpo 
+//solido. Estos son el traje espacial y el cuerpo humano con cada organo.
+
 
 #include "EDDetectorConstruction.hh"
 #include "G4Sphere.hh"
@@ -62,27 +39,29 @@ EDDetectorConstruction::~EDDetectorConstruction()
 
 G4VPhysicalVolume* EDDetectorConstruction::Construct()
 {  
-  // Get nist material manager
+  // Obtener el nist material manager para importar cada material
   G4NistManager* nistManager = G4NistManager::Instance();
   
-  // Build materials
+  // contruir cada material y almacenarlo en una variable
   G4Material* galactic = nistManager->FindOrBuildMaterial("G4_Galactic");
   G4Material* soft = nistManager->FindOrBuildMaterial("G4_TISSUE_SOFT_ICRP");
   G4Material* skeleton = nistManager->FindOrBuildMaterial("G4_B-100_BONE");
-  G4Material* pb = nistManager->FindOrBuildMaterial("G4_POLYETHYLENE");
+  G4Material* suit_material = nistManager->FindOrBuildMaterial("G4_POLYETHYLENE");
   G4Material* muscle = nistManager->FindOrBuildMaterial("G4_MUSCLE_WITHOUT_SUCROSE");
 
        // There is no need to test if materials were built/found
        // as G4NistManager would issue an error otherwise
        // Try the code with "XYZ".      
   
-  // Option to switch on/off checking of volumes overlaps
+  // Esta opción es para ayudarnos a garantizar una adecuada ubicación de
+  //cada organo, de modo que no permitira que se sobrepongan unos con otros
    G4bool checkOverlaps = true;
 
   //     
   // World
   //
-  // world volume
+  // Definición del mundo. Espacio físico que contendrá cada elemento de la
+  //aplicación
   G4Box* worldS = new G4Box("World", 3.*m, 3.*m,3.*m); 
       
   G4LogicalVolume* worldLV                         
@@ -116,7 +95,7 @@ G4VPhysicalVolume* EDDetectorConstruction::Construct()
                                  0, G4ThreeVector(0.,0.,-33.*cm));
   
   G4LogicalVolume* logic_helmet 
-    = new G4LogicalVolume(helmetS,pb,"helmet_logical");
+    = new G4LogicalVolume(helmetS,suit_material,"helmet_logical");
 
   G4VPhysicalVolume* helmet = 
     new G4PVPlacement(rm,G4ThreeVector(0.,0.,77.75*cm),
@@ -130,7 +109,7 @@ G4VPhysicalVolume* EDDetectorConstruction::Construct()
   G4VSolid* bodysuitS = new G4EllipticalTube("bodysuit_solid",22.*cm,12.*cm,30.5*cm);
 
   G4LogicalVolume* logicbodysuit
-    = new G4LogicalVolume(bodysuitS,pb,"bodysuit_logical");
+    = new G4LogicalVolume(bodysuitS,suit_material,"bodysuit_logical");
 
   G4VPhysicalVolume* bodysuit = new G4PVPlacement(rm,
                              G4ThreeVector(0,0,35.*cm),
@@ -147,7 +126,7 @@ G4VPhysicalVolume* EDDetectorConstruction::Construct()
                                     0,360.*deg);
 
   G4LogicalVolume* logic_suitleft_leg = new G4LogicalVolume(left_suitlegS,
-                                                  pb,"left_suitleg_logical");
+                                                  suit_material,"left_suitleg_logical");
 
   G4VPhysicalVolume* left_suitleg = new G4PVPlacement(rm,
                                     G4ThreeVector(10.*cm,0.*cm,-37.*cm),
@@ -169,7 +148,7 @@ G4VPhysicalVolume* EDDetectorConstruction::Construct()
    G4VSolid* left_suitarmS = new G4EllipticalTube("leftsuitarm_solid",2.4*cm * 2.,4.7*cm * 2.,36.5*cm);
 
   G4LogicalVolume* logic_leftsuit_arm = new G4LogicalVolume(left_suitarmS,
-                                                  pb,"left_suitarm_logical");
+                                                  suit_material,"left_suitarm_logical");
 
   G4VPhysicalVolume* left_suitarm = new G4PVPlacement(rm,
                                     G4ThreeVector(23.*cm,0.*cm,27.5*cm),
