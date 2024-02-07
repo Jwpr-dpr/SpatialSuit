@@ -1,4 +1,4 @@
-# *Proyecto Spatial Suit *
+# Proyecto Spatial Suit
 
 En la búsqueda por expandir la presencia humana más allá de la atmósfera terrestre, la seguridad y el bienestar de los astronautas durante misiones espaciales de largo alcance se convierte en un desafío primordial. Los peligros de la radiación cósmica exigen soluciones para resguardar la salud de los mismos.
 
