@@ -1,3 +1,9 @@
+//Archivo SensitiveDetector.cc del Proyecto Spatial suit
+//
+//Este archivo nos permitirá designar distintas geometrías como sensibles,
+//es decir, que registren la energía que se almacena en su interior tras
+//la ejecución de una simulación.
+
 #include "SensitiveDetector.hh"
 #include "G4AnalysisManager.hh"
 #include "G4HCofThisEvent.hh"
